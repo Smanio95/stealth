@@ -1,0 +1,19 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\smanio\\stealth-proj\\stealth\\intermediate\\build\\win64\\unrealeditor\\inc\\stealth\\uht\\stealthgamemode.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\smanio\\stealth-proj\\stealth\\intermediate\\build\\win64\\x64\\stealtheditor\\development\\engine\\sharedpch.engine.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\smanio\\stealth-proj\\stealth\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\stealth\\definitions.stealth.h",
+            "c:\\users\\smanio\\stealth-proj\\stealth\\source\\stealth\\stealthgamemode.h",
+            "c:\\program files\\epic games\\ue_5.3\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemodebase.h",
+            "c:\\program files\\epic games\\ue_5.3\\engine\\source\\runtime\\engine\\classes\\engine\\serverstatreplicator.h",
+            "c:\\program files\\epic games\\ue_5.3\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\serverstatreplicator.generated.h",
+            "c:\\program files\\epic games\\ue_5.3\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamemodebase.generated.h",
+            "c:\\users\\smanio\\stealth-proj\\stealth\\intermediate\\build\\win64\\unrealeditor\\inc\\stealth\\uht\\stealthgamemode.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

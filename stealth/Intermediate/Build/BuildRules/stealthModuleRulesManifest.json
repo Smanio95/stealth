@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"C:\\Users\\Smanio\\stealth-proj\\stealth\\Source\\stealth\\stealth.Build.cs",
+		"C:\\Users\\Smanio\\stealth-proj\\stealth\\Source\\stealth.Target.cs",
+		"C:\\Users\\Smanio\\stealth-proj\\stealth\\Source\\stealthEditor.Target.cs"
+	],
+	"EngineVersion": "5.3.2"
+}

@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\smanio\\stealth-proj\\stealth\\source\\stealth\\stealth.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\smanio\\stealth-proj\\stealth\\intermediate\\build\\win64\\x64\\stealtheditor\\development\\engine\\sharedpch.engine.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\smanio\\stealth-proj\\stealth\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\stealth\\definitions.stealth.h",
+            "c:\\users\\smanio\\stealth-proj\\stealth\\source\\stealth\\stealth.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

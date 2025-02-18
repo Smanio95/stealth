@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\stealth.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\stealth.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\stealthEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\.vsconfig" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\stealth">
+      <UniqueIdentifier>{682D1D8C-4502-3EFD-9DA3-C59A0957B9EF}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\stealth\stealth.Build.cs">
+      <Filter>Source\stealth</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\stealth\stealth.cpp">
+      <Filter>Source\stealth</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\stealth\stealth.h">
+      <Filter>Source\stealth</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\stealth\stealthCharacter.cpp">
+      <Filter>Source\stealth</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\stealth\stealthCharacter.h">
+      <Filter>Source\stealth</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\stealth\stealthGameMode.cpp">
+      <Filter>Source\stealth</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\stealth\stealthGameMode.h">
+      <Filter>Source\stealth</Filter>
+    </ClInclude>
+    <Filter Include="Source\stealth\Private">
+      <UniqueIdentifier>{61728479-ACBC-399A-B034-80D9C549B030}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\stealth\Private\Enemy.cpp">
+      <Filter>Source\stealth\Private</Filter>
+    </ClCompile>
+    <Filter Include="Source\stealth\Public">
+      <UniqueIdentifier>{77529EE9-C077-3913-A8C9-CC4D0A7BA259}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\stealth\Public\Enemy.h">
+      <Filter>Source\stealth\Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-stealth.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\stealthEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\stealth.init.gen.cpp.obj"
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\stealthCharacter.gen.cpp.obj"
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\stealthGameMode.gen.cpp.obj"
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\stealth.cpp.obj"
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\stealthCharacter.cpp.obj"
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\stealthGameMode.cpp.obj"
+"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\Default.rc2.res"
+/OUT:"C:\Users\Smanio\stealth-proj\stealth\Intermediate\Build\Win64\x64\UnrealEditor\Development\stealth\UnrealEditor-stealth.lib"
