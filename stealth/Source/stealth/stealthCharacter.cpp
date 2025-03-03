@@ -97,6 +97,12 @@ void AstealthCharacter::Tick(float DeltaSeconds)
 	CurrentFocused->ToggleFocus(FVector::DotProduct(GetActorForwardVector(), CurrentFocused->GetActorForwardVector()) >= AttackMinDotValue);
 }
 
+void AstealthCharacter::EmitNoise()
+{
+	// make noise while moving
+	PawnNoiseEmitter->MakeNoise(this, (bIsCrouched ? CrouchVolume : StandVolume), GetActorLocation());
+}
+
 void AstealthCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
@@ -264,9 +270,6 @@ void AstealthCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
-
-		// make noise while moving
-		PawnNoiseEmitter->MakeNoise(this, (bIsCrouched ? CrouchVolume : StandVolume) * GetWorld()->DeltaTimeSeconds, GetActorLocation());
 	}
 }
 

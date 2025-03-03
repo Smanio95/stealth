@@ -95,6 +95,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CustomReposition(FTransform StartPos, FTransform EndPos);
 
+	UFUNCTION(BlueprintCallable)
+	void EmitNoise();
+
 	// COMBAT
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
