@@ -13,3 +13,12 @@ AstealthGameMode::AstealthGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+
+void AstealthGameMode::NotifyEndGame(bool Success)
+{
+	if (IsEndGame) return;
+
+	IsEndGame = true;
+
+	OnEndGame.Broadcast(Success);
+}

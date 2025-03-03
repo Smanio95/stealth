@@ -12,6 +12,8 @@
 #include "InputActionValue.h"
 #include "Enemy.h"
 #include <Kismet/KismetMathLibrary.h>
+#include <Kismet/GameplayStatics.h>
+#include "stealthGameMode.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -56,6 +58,9 @@ AstealthCharacter::AstealthCharacter()
 	FocusBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FocusBox"));
 	FocusBox->SetupAttachment(RootComponent);
 
+	// Noise emitter
+	PawnNoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("Noise Emitter"));
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -76,6 +81,20 @@ void AstealthCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	AstealthGameMode* GM = Cast<AstealthGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (GM)
+	{
+		GM->OnEndGame.AddUniqueDynamic(this, &AstealthCharacter::Deactivate);
+	}
+}
+
+void AstealthCharacter::Tick(float DeltaSeconds)
+{
+	if (!CurrentFocused) return;
+
+	CurrentFocused->ToggleFocus(FVector::DotProduct(GetActorForwardVector(), CurrentFocused->GetActorForwardVector()) >= AttackMinDotValue);
 }
 
 void AstealthCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -89,11 +108,16 @@ void AstealthCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 
 void AstealthCharacter::OnOverlapExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OtherActor == CurrentFocused)
+	if (OtherActor == CurrentFocused && !GetMesh()->GetAnimInstance()->Montage_IsPlaying(AttackMontage))
 	{
 		CurrentFocused->ToggleFocus(false);
 		CurrentFocused = nullptr;
 	}
+}
+
+void AstealthCharacter::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	GetController()->SetIgnoreMoveInput(false);
 }
 
 void AstealthCharacter::OnNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
@@ -101,13 +125,8 @@ void AstealthCharacter::OnNotify(FName NotifyName, const FBranchingPointNotifyPa
 	if (NotifyName != KillNotify) return;
 
 	CurrentFocused->Die();
-}
 
-void AstealthCharacter::AttackReposition_Implementation(FTransform StartPos, FTransform EndPos)
-{
-	CurrentFocused->Deactivate();
-
-	PlayAttack();
+	CurrentFocused = nullptr;
 }
 
 void AstealthCharacter::PlayAttack()
@@ -120,7 +139,12 @@ void AstealthCharacter::PlayAttack()
 
 	if (MontageLength <= 0) return;
 
+	GetController()->SetIgnoreMoveInput(true);
+
+	CurrentFocused->Immobilize();
+
 	Instance->OnPlayMontageNotifyBegin.AddUniqueDynamic(this, &AstealthCharacter::OnNotify);
+	Instance->OnMontageEnded.AddUniqueDynamic(this, &AstealthCharacter::OnMontageEnd);
 
 }
 
@@ -128,7 +152,6 @@ AEnemy* AstealthCharacter::GetLookClosestEnemy(AEnemy* Other)
 {
 	if (!CurrentFocused)
 	{
-		Other->ToggleFocus(true);
 		return Other;
 	}
 
@@ -146,7 +169,6 @@ AEnemy* AstealthCharacter::GetLookClosestEnemy(AEnemy* Other)
 	{
 		// switch focus
 		CurrentFocused->ToggleFocus(false);
-		Other->ToggleFocus(true);
 
 		return Other;
 	}
@@ -156,6 +178,10 @@ AEnemy* AstealthCharacter::GetLookClosestEnemy(AEnemy* Other)
 
 void AstealthCharacter::Attack()
 {
+	UAnimInstance* Instance = GetMesh()->GetAnimInstance();
+
+	if (!Instance || !AttackMontage || Instance->Montage_IsPlaying(AttackMontage)) return;
+
 	if (!CurrentFocused || FVector::DotProduct(GetActorForwardVector(), CurrentFocused->GetActorForwardVector()) < AttackMinDotValue) return;
 
 	FTransform StartTransform = FTransform(
@@ -172,7 +198,24 @@ void AstealthCharacter::Attack()
 		FVector::OneVector
 	);
 
-	AttackReposition(StartTransform, EndTransform);
+	CustomReposition(StartTransform, EndTransform);
+
+	PlayAttack();
+}
+
+void AstealthCharacter::Deactivate(bool Success)
+{
+	GetController()->SetIgnoreMoveInput(true);
+	GetController()->SetIgnoreLookInput(true);
+
+	if (!Success)
+	{
+		bIsDead = true;
+	}
+	else
+	{
+		bHasWon = true;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -221,6 +264,9 @@ void AstealthCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		// make noise while moving
+		PawnNoiseEmitter->MakeNoise(this, (bIsCrouched ? CrouchVolume : StandVolume) * GetWorld()->DeltaTimeSeconds, GetActorLocation());
 	}
 }
 

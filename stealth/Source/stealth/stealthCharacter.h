@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Components/BoxComponent.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 #include "stealthCharacter.generated.h"
 
 class USpringArmComponent;
@@ -17,7 +18,7 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-UCLASS(config=Game)
+UCLASS(config = Game)
 class AstealthCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -29,7 +30,7 @@ class AstealthCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-	
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
@@ -57,6 +58,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* FocusBox;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Noise, meta = (AllowPrivateAccess = "true"))
+	UPawnNoiseEmitterComponent* PawnNoiseEmitter;
+
 protected:
 
 	/** Called for movement input */
@@ -70,9 +74,11 @@ protected:
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 	// To add mapping context
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -80,7 +86,16 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-// COMBAT
+	UFUNCTION(BlueprintCallable)
+	bool GetIsDead() const { return bIsDead; }
+	
+	UFUNCTION(BlueprintCallable)
+	bool GetHasWon() const { return bHasWon; }
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CustomReposition(FTransform StartPos, FTransform EndPos);
+
+	// COMBAT
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* AttackMontage;
@@ -92,6 +107,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	FName KillNotify = "kill";
+
+	UFUNCTION()
+	void OnMontageEnd(UAnimMontage* Montage, bool bInterrupted);
 
 	UFUNCTION()
 	void OnNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
@@ -108,15 +126,26 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	float AttackMinDotValue = 0.3f;
 
+	bool bIsDead = false;
+
+	bool bHasWon = false;
+
 protected:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void AttackReposition(FTransform StartPos, FTransform EndPos);
 
 	AEnemy* GetLookClosestEnemy(AEnemy* Other);
 
 	UPROPERTY(BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	AEnemy* CurrentFocused;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	float StandVolume = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	float CrouchVolume = .5f;
+
 	void Attack();
+
+	UFUNCTION()
+	void Deactivate(bool Success);
 };
 
